@@ -1,3 +1,5 @@
+import random
+
 class AbstractMelonOrder(object):
     """A class which provides blueprint for domestic and intenational melon orders.
     """
@@ -14,7 +16,7 @@ class AbstractMelonOrder(object):
         if self.species == "Christmas":
             base_price = 7.5
         else:
-            base_price = 5        
+            base_price = self.get_base_price()
 
         total = (1 + self.tax) * self.qty * base_price
 
@@ -28,12 +30,14 @@ class AbstractMelonOrder(object):
 
         self.shipped = True
 
+    def get_base_price(self):
+        base_price = random.randint(5,9)
+        print base_price
+        return base_price
 
 class DomesticMelonOrder(AbstractMelonOrder):
     """Subclass for domestic orders
     """
-
-    
 
     tax = .08
     order_type = "domestic"
@@ -52,3 +56,20 @@ class InternationalMelonOrder(AbstractMelonOrder):
         super(InternationalMelonOrder, self).__init__(species, qty)
         self.country_code = country_code
 
+
+class GovernmentMelonOrder(AbstractMelonOrder):
+    """Subclass for govenremnt orders
+    """
+    
+    tax = 0
+    order_type = "government"
+
+    def __init__(self, species, qty):
+        super(GovernmentMelonOrder, self).__init__(species, qty)
+        self.passed_inspection = False
+
+    def mark_inspection(self, passed):
+
+        if passed:
+            self.passed_inspection = True
+            print "You passed your inspection!"
